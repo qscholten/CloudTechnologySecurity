@@ -12,15 +12,16 @@ function lampuit() {
 }
 
 client.on('message', (topic, message) => {
-    if (isNaN(message)) {
-        console.log("Ongeldige lichtsterkte ontvangen!")
+    const jsonmessage = JSON.parse(message);
+    if (isNaN(jsonmessage.lichtsterkte)) {
+        console.log("Ongeldige lichtsterkte ontvangen!");
     }
     else {
-        lampstatus = message;
+        lampstatus = jsonmessage.lichtsterkte;
     }
     if (lampstatus > 0){ 
         console.log(`Lamp is aan met lichtsterkte ${lampstatus}.`);
-        //17
+          //17
         const mytimeout = setTimeout(function(){lampuit()}, 5000);
     }
     else if (lampstatus == 0) {
@@ -29,3 +30,5 @@ client.on('message', (topic, message) => {
   });
   client.subscribe("Beweging");
 
+
+  

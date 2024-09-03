@@ -19,12 +19,13 @@ console.log("Press enter voor beweging");
 rl.on('line', (input) => {
   //console.log(`Received: ${input}`);
   console.log("Er is beweging geconstateerd");
-  client.publish("Beweging", "255");
+  let text = '{"lichtsterkte" : "255"}';
+  client.publish("Beweging", text);
   //17
   /*
   setTimeout(() => {
     console.log("Geen beweging meer gedetecteerd.");
-    client.publish("Beweging", "0");
+    client.publish("Beweging", '{"lichtsterkte" : "0"}');
   }, 5000);
   */
 });
