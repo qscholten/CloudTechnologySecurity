@@ -140,20 +140,22 @@ app.http('PersonenToevoegen', {
     handler: async (request, context) => {
         context.log(`HTTP function processed request for url "${request.url}"`);
         try {
-            var naam = request.query.get('naam');
-            if (naam === null) {
+            var bod = await request.text();
+            var nieuwpersoon = JSON.parse(bod);
+            if (!nieuwpersoon.hasOwnProperty("Naam")) {
                 context.log("Poging tot toevoeging persoon zonder naam.")
                 return {
                     status: 404
                 }
             }
             else {
-                var nieuwpersoon = {Naam: naam};
                 jsonlist.Personen.push(nieuwpersoon);
-                context.log(`Persoon toegevoegd: ${JSON.stringify(nieuwpersoon)}`)
+                context.log(`Persoon toegevoegd: ${JSON.stringify(nieuwpersoon)}`);
+                return {
+                    status: 200,
+                    body: `Persoon succesvol toegevoegd: ${JSON.stringify(nieuwpersoon)}`
+                }
             }
-
-            return {body: `Persoon succesvol toegevoegd: ${JSON.stringify(nieuwpersoon)}`};
         }
         catch (e) {
             context.log(`Fout bij het verwerken van het toevoegen van een persoon`, e);
@@ -165,7 +167,7 @@ app.http('PersonenToevoegen', {
     }
 });
 ```
-![alt text](img4/image-3.png)
+![alt text](img4/image3.png)
 ![alt text](img4/image-4.png)
 
 5.
@@ -173,7 +175,7 @@ app.http('PersonenToevoegen', {
 ```
 app.http('PersonenAanpassen', {
     methods: ['PUT'],
-    authLevel: 'anonymous',
+    authLevel: 'function',
     route: 'personen/{id:int?}',
     handler: async (request, context) => {
         context.log(`HTTP function processed request for url "${request.url}"`);
@@ -186,7 +188,8 @@ app.http('PersonenAanpassen', {
                     body: 'Persoon met dit id bestaat niet.'
                 }
             }
-            var naam = request.query.get('naam');
+            var bod = await request.json();
+            var naam = bod.Naam;
             if (naam == null) {
                 context.log("Poging tot verandering persoon zonder naam.")
                 return {
@@ -214,8 +217,8 @@ app.http('PersonenAanpassen', {
 });
 ```
 
-![alt text](img4/image-5.png)
-![alt text](img4/image-6.png)
+![alt text](img4/image5.png)
+![alt text](img4/image6.png)
 
 6.
 
@@ -258,17 +261,15 @@ app.http('PersonenVerwijderen', {
 ![alt text](img4/image-8.png)
 
 7.
+![alt text](img4/imagex1.png)
+![alt text](img4/imagex2.png)
+![alt text](img4/imagex3.png)
+![alt text](img4/imagex4.png)
+![alt text](img4/imagex5.png)
+![alt text](img4/imagex6.png)
 
-![alt text](img4/image-9.png)
-![alt text](img4/image-10.png)
-![alt text](img4/image-11.png)
-![alt text](img4/image-12.png)
-![alt text](img4/image-13.png)
-![alt text](img4/image-14.png)
-![alt text](img4/image-15.png)
+1. Door de authorization level te veranderen van 'anonymous' naar 'function' of 'admin' is er een specifieke key nodig om de API te kunnen gebruiken. 
 
-8. Door de authorization level te veranderen van 'anonymous' naar 'function' of 'admin' is er een specifieke key nodig om de API te kunnen gebruiken. 
-
-9. Er is een parameter "code" toegevoegd in de link die gebruikt wordt voor het GET request.
+2. Er is een parameter "code" toegevoegd in de link die gebruikt wordt voor het GET request.
 
 ![alt text](img4/image-16.png)

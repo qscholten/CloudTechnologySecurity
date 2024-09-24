@@ -39,20 +39,22 @@ app.http('PersonenToevoegen', {
     handler: async (request, context) => {
         context.log(`HTTP function processed request for url "${request.url}"`);
         try {
-            var naam = request.query.get('naam');
-            if (naam === null) {
+            var bod = await request.text();
+            var nieuwpersoon = JSON.parse(bod);
+            if (!nieuwpersoon.hasOwnProperty("Naam")) {
                 context.log("Poging tot toevoeging persoon zonder naam.")
                 return {
                     status: 404
                 }
             }
             else {
-                var nieuwpersoon = {Naam: naam};
                 jsonlist.Personen.push(nieuwpersoon);
-                context.log(`Persoon toegevoegd: ${JSON.stringify(nieuwpersoon)}`)
+                context.log(`Persoon toegevoegd: ${JSON.stringify(nieuwpersoon)}`);
+                return {
+                    status: 200,
+                    body: `Persoon succesvol toegevoegd: ${JSON.stringify(nieuwpersoon)}`
+                }
             }
-
-            return {body: `Persoon succesvol toegevoegd: ${JSON.stringify(nieuwpersoon)}`};
         }
         catch (e) {
             context.log(`Fout bij het verwerken van het toevoegen van een persoon`, e);
@@ -79,7 +81,8 @@ app.http('PersonenAanpassen', {
                     body: 'Persoon met dit id bestaat niet.'
                 }
             }
-            var naam = request.query.get('naam');
+            var bod = await request.json();
+            var naam = bod.Naam;
             if (naam == null) {
                 context.log("Poging tot verandering persoon zonder naam.")
                 return {
