@@ -16,7 +16,7 @@ var deurstatus = "open";
 
 function main() {
     // open a connection to the device
-    const deviceConnectionString = "HostName=KwiksHub.azure-devices.net;DeviceId=NewDoor;SharedAccessKey=/b9fYwFhQYbnIbK9x4rSc4v+TgtkmLxh2AIoTN89WOQ="//process.env.IOTHUB_DEVICE_CONNECTION_STRING_DOOR;
+    const deviceConnectionString = process.env.IOTHUB_DEVICE_CONNECTION_STRING_DOOR;
     client = Client.fromConnectionString(deviceConnectionString, Protocol);
     // eslint-disable-next-line security/detect-non-literal-fs-filename
     client.open(onConnect);

@@ -9,7 +9,7 @@ var myinterval = "";
 
 function main() {
     // open a connection to the device
-    const deviceConnectionString = "HostName=KwiksHub.azure-devices.net;DeviceId=NewAlarm;SharedAccessKey=2troEJTMjwjI+DmCyeFtLLygkfA36yWU7AIoTGcqSYg="//process.env.IOTHUB_DEVICE_CONNECTION_STRING_ALARM;
+    const deviceConnectionString = process.env.IOTHUB_DEVICE_CONNECTION_STRING_ALARM;
     client = Client.fromConnectionString(deviceConnectionString, Protocol);
     // eslint-disable-next-line security/detect-non-literal-fs-filename
     client.open(onConnect);
