@@ -6,7 +6,7 @@ app.http('AlarmIOT', {
     route: 'alarm2/{id:int?}',
     handler: async (request, context) => {
         var Client = require('azure-iothub').Client;
-        var connectionString = 'HostName=KwiksHub.azure-devices.net;SharedAccessKeyName=service;SharedAccessKey=XgO29InUL2JBZC+36ZG5VyTBgsx28M2XGAIoTHRAOI4='//process.env.IOTHUB_CONNECTION_STRING;
+        var connectionString = process.env.IOTHUB_CONNECTION_STRING;
         var client = Client.fromConnectionString(connectionString);
         context.log(`Http function processed request for url "${request.url}"`);
 
